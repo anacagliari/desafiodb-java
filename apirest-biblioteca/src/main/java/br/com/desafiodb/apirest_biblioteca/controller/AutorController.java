@@ -1,9 +1,11 @@
 package br.com.desafiodb.apirest_biblioteca.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +46,16 @@ public class AutorController {
     public ResponseEntity<Autor> buscaAutorPorNome(@RequestParam String nome) {
         Autor autor = autorService.buscaAutorPorNome(nome).orElseThrow(() -> new RuntimeException("Autor não encontrado."));
         return ResponseEntity.ok(autor);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletaAutor(@PathVariable Long id) {
+        Optional<Autor> autor = autorService.buscaAutorPorId(id);
+        if (!autor.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        autorService.deletaAutor(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
