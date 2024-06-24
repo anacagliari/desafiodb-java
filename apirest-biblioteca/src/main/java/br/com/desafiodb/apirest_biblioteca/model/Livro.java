@@ -38,6 +38,9 @@ public class Livro {
     )
     private Set<Autor> autores = new HashSet<>();
 
+    @ManyToMany(mappedBy = "livros")
+    private Set<Aluguel> alugueis = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -76,6 +79,14 @@ public class Livro {
 
     public void setAutores(Set<Autor> autores) {
         this.autores = autores;
+    }
+
+    public Set<Aluguel> getAlugueis() {
+        return alugueis;
+    }
+
+    public void setAlugueis(Set<Aluguel> alugueis) {
+        this.alugueis = alugueis;
     }
 
 } 

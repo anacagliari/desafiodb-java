@@ -28,6 +28,9 @@ public class LivroService {
     }
 
     public void deletaLivro(Long id) {
+        if (livroRepository.quantidadeAlugueisDoLivro(id) > 0) {
+            throw new RuntimeException("Livro foi alugado, não pode ser deletado.");
+        }
         livroRepository.deleteById(id);
     }
 }
