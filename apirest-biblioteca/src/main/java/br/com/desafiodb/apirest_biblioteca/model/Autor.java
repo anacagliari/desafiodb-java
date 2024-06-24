@@ -1,9 +1,16 @@
 package br.com.desafiodb.apirest_biblioteca.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Autor {
@@ -12,10 +19,21 @@ public class Autor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String nome;
+
+    @NotBlank
     private String sexo;
+
+    @NotNull
     private Integer anoNascimento;
+
+    @NotBlank
+    @Column(unique = true)
     private String cpf;
+
+    @ManyToMany(mappedBy = "autores")
+    private Set<Livro> livros = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -55,6 +73,14 @@ public class Autor {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public Set<Livro> getLivros() {
+        return livros;
+    }
+
+    public void setLivros(Set<Livro> livros) {
+        this.livros = livros;
     }
 
 }

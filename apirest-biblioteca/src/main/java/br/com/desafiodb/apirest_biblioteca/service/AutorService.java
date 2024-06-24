@@ -31,4 +31,8 @@ public class AutorService {
         return autorRepository.findByNome(nome);
     }
 
+    public void deletaAutor(Long id) {
+        autorRepository.deleteById(id);
+    }
+
 }
