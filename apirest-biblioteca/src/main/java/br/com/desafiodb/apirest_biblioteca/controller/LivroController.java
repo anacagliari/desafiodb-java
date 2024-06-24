@@ -18,15 +18,15 @@ import br.com.desafiodb.apirest_biblioteca.service.LivroService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/livros")
+@RequestMapping("/livro")
 public class LivroController {
 
     @Autowired
     private LivroService livroService;
 
     @PostMapping
-    public ResponseEntity<Livro> salvarLivro(@Valid @RequestBody Livro livro) {
-        Livro livroSalvo = livroService.salvarLivro(livro);
+    public ResponseEntity<Livro> salvaLivro(@Valid @RequestBody Livro livro) {
+        Livro livroSalvo = livroService.salvaLivro(livro);
         return ResponseEntity.ok(livroSalvo);
     }
 
@@ -43,7 +43,7 @@ public class LivroController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarLivro(@PathVariable Long id) {
+    public ResponseEntity<Void> deletaLivro(@PathVariable Long id) {
         Optional<Livro> livro = livroService.buscaLivroPorId(id);
         if (!livro.isPresent()) {
             return ResponseEntity.notFound().build();

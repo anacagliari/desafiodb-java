@@ -15,7 +15,7 @@ public class AutorService {
     @Autowired
     private AutorRepository autorRepository;
 
-    public Autor salvarAutor(Autor autor) {
+    public Autor salvaAutor(Autor autor) {
         return autorRepository.save(autor);
     }
 
