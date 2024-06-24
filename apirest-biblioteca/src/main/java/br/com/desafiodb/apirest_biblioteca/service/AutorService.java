@@ -32,6 +32,9 @@ public class AutorService {
     }
 
     public void deletaAutor(Long id) {
+        if (autorRepository.quantidadeLivrosAssociados(id) > 0) {
+            throw new RuntimeException("Autor possui livro(s) associado(s), não pode ser deletado.");
+        }
         autorRepository.deleteById(id);
     }
 
