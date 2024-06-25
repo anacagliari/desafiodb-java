@@ -58,6 +58,16 @@ public class LivroController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/alugados")
+    public ResponseEntity<List<LivroListaResponseDto>> listaTodosLivrosAlugados() {
+        List<Livro> livros = livroService.listaTodosLivrosAlugados();
+        List<LivroListaResponseDto> response = new ArrayList<LivroListaResponseDto>();
+        livros.stream().forEach(livro -> {
+            response.add(new LivroListaResponseDto(livro));
+        });
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<LivroConsultaResponseDto> buscaLivroPorId(@PathVariable Long id) {
         Optional<Livro> livro = livroService.buscaLivroPorId(id);
