@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.desafiodb.apirest_biblioteca.model.Autor;
 import br.com.desafiodb.apirest_biblioteca.repository.AutorRepository;
+import br.com.desafiodb.apirest_biblioteca.util.RegraNegocioException;
 
 @Service
 public class AutorService {
@@ -33,9 +34,23 @@ public class AutorService {
 
     public void deletaAutor(Long id) {
         if (autorRepository.quantidadeLivrosAssociados(id) > 0) {
-            throw new RuntimeException("Autor possui livro(s) associado(s), não pode ser deletado.");
+            throw new RegraNegocioException("Autor possui livro(s) associado(s), não pode ser deletado.");
         }
         autorRepository.deleteById(id);
+    }
+
+    public Autor alteraAutor(Autor autor) {
+        Optional<Autor> autorExiste = autorRepository.findById(autor.getId());
+        if (!autorExiste.isPresent()) {
+            throw new RegraNegocioException("Autor não encontrado.");
+        }
+        Autor autorExistente = autorExiste.get();
+        autorExistente.setNome(autor.getNome());
+        autorExistente.setSexo(autor.getSexo());
+        autorExistente.setAnoNascimento(autor.getAnoNascimento());
+        autorExistente.setCpf(autor.getCpf());
+        Autor autorAtualizado = autorRepository.save(autorExistente);
+        return autorAtualizado;
     }
 
 }

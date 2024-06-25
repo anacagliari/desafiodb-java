@@ -1,5 +1,6 @@
 package br.com.desafiodb.apirest_biblioteca.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorAlteracaoRequestDto;
+import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorAlteracaoResponseDto;
+import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorConsultaResponseDto;
+import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorInclusaoRequestDto;
+import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorInclusaoResponseDto;
+import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorListaResponseDto;
 import br.com.desafiodb.apirest_biblioteca.model.Autor;
 import br.com.desafiodb.apirest_biblioteca.service.AutorService;
 import jakarta.validation.Valid;
@@ -27,45 +34,31 @@ public class AutorController {
     private AutorService autorService;
 
     @PostMapping()
-    public ResponseEntity<Autor> salvaAutor(@RequestBody Autor autor) {
-        Autor novoAutor = autorService.salvaAutor(autor);
-        return ResponseEntity.ok(novoAutor);
+    public ResponseEntity<AutorInclusaoResponseDto> salvaAutor(@RequestBody AutorInclusaoRequestDto autorInclusaoRequestDto) {
+        AutorInclusaoResponseDto response = new AutorInclusaoResponseDto(autorService.salvaAutor(autorInclusaoRequestDto.parseToModel()));
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Autor>> listaTodosAutores() {
+    @GetMapping()
+    public ResponseEntity<List<AutorListaResponseDto>> listaTodosAutores() {
         List<Autor> autores = autorService.listaTodosAutores();
-        return ResponseEntity.ok(autores);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Autor> buscaAutorPorId(@PathVariable Long id) {
-        Autor autor = autorService.buscaAutorPorId(id).orElseThrow(() -> new RuntimeException("Autor não encontrado."));
-        return ResponseEntity.ok(autor);
+        List<AutorListaResponseDto> autoresDto = new ArrayList<AutorListaResponseDto>();
+        autores.stream().forEach(autor -> {
+            autoresDto.add(new AutorListaResponseDto(autor));
+        });
+        return ResponseEntity.ok(autoresDto);
     }
 
     @GetMapping("/nome")
-    public ResponseEntity<Autor> buscaAutorPorNome(@RequestParam String nome) {
-        Autor autor = autorService.buscaAutorPorNome(nome)
-                .orElseThrow(() -> new RuntimeException("Autor não encontrado."));
-        return ResponseEntity.ok(autor);
+    public ResponseEntity<AutorConsultaResponseDto> buscaAutorPorNome(@RequestParam String nome) {
+        Autor autor = autorService.buscaAutorPorNome(nome).orElseThrow(() -> new RuntimeException("Autor não encontrado."));
+        AutorConsultaResponseDto response = new AutorConsultaResponseDto(autor);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Autor> atualizarAutor(@PathVariable Long id, @Valid @RequestBody Autor autorDetalhes) {
-        Optional<Autor> autorExistente = autorService.buscaAutorPorId(id);
-        if (!autorExistente.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Autor autor = autorExistente.get();
-        autor.setNome(autorDetalhes.getNome());
-        autor.setSexo(autorDetalhes.getSexo());
-        autor.setAnoNascimento(autorDetalhes.getAnoNascimento());
-        autor.setCpf(autorDetalhes.getCpf());
-        autor.setLivros(autorDetalhes.getLivros());
-
-        Autor autorAtualizado = autorService.salvaAutor(autor);
+    @PutMapping()
+    public ResponseEntity<AutorAlteracaoResponseDto> atualizarAutor(@Valid @RequestBody AutorAlteracaoRequestDto autor) {
+        AutorAlteracaoResponseDto autorAtualizado = new AutorAlteracaoResponseDto(autorService.alteraAutor(autor.parseToModel()));
         return ResponseEntity.ok(autorAtualizado);
     }
 
