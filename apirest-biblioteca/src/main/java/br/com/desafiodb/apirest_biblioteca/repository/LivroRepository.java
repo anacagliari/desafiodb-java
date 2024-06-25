@@ -20,5 +20,9 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
     @Query("SELECT l FROM Livro l JOIN l.alugueis a " +
            "WHERE :data > a.dataRetirada AND :data < a.dataDevolucao")
     List<Livro> listaTodosLivrosAlugados(LocalDate data);
+
+    @Query("SELECT l FROM Livro l JOIN l.alugueis a JOIN a.locatario loc " +
+           "WHERE loc.id = :id")
+    List<Livro> listaTodosLivrosAlugadosLocatario(Long id);
     
 }
