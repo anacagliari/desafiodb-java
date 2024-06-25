@@ -50,6 +50,10 @@ public class LivroService {
     public List<Livro> listaTodosLivrosAlugados() {
         return livroRepository.listaTodosLivrosAlugados(LocalDate.now());
     }
+    
+        public List<Livro> listaTodosLivrosAlugadosLocatario(Long id) {
+            return livroRepository.listaTodosLivrosAlugadosLocatario(id);
+        }
 
     public Optional<Livro> buscaLivroPorId(Long id) {
         return livroRepository.findById(id);
