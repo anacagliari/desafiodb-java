@@ -47,6 +47,10 @@ public class LivroService {
         return livroRepository.listaTodosLivrosDisponiveis(LocalDate.now());
     }
 
+    public List<Livro> listaTodosLivrosAlugados() {
+        return livroRepository.listaTodosLivrosAlugados(LocalDate.now());
+    }
+
     public Optional<Livro> buscaLivroPorId(Long id) {
         return livroRepository.findById(id);
     }
@@ -70,4 +74,5 @@ public class LivroService {
         }
         livroRepository.deleteById(id);
     }
+
 }
