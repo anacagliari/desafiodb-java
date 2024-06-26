@@ -1,0 +1,28 @@
+• Para criar testes unitários para as entidades Autor, Locatário, Livro e Aluguel no seu projeto Spring Boot utilizando Maven, você precisará criar testes para os controladores, 
+serviços e repositórios de cada entidade. Vamos seguir a estrutura abaixo para cada entidade: Teste de Controlador | Teste de Serviço | Teste de Repositório
+
+• Dependências do Maven - Certifique-se de incluir as dependências de teste necessárias no seu pom.xml:
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-core</artifactId>
+    <scope>test</scope>
+</dependency>
+
+• Considerações Finais
+1. Estrutura de Pastas: Mantenha uma estrutura de pastas organizada para separar os testes de controladores, serviços e repositórios.
+2. Mocking e Injeção de Dependências: Utilize @Mock e @InjectMocks para criar mocks e injetar dependências nos serviços.
+3. Utilização de MockMvc: Use MockMvc para simular chamadas HTTP nos testes de controladores.
+4. Verificação de Interações: Utilize o Mockito para verificar as interações com os mocks e garantir que o comportamento esperado está ocorrendo.
+Seguindo essas diretrizes e ex.s, vc pode criar uma suite de testes unitários abrangente p/ sua aplicação Spring Boot, garantindo que todas as camadas sejam testadas de forma eficaz.
+
+• Outras dependencias:
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+    <scope>test</scope>
+</dependency>

@@ -24,7 +24,6 @@ import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorInclusaoResponseDto;
 import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorListaResponseDto;
 import br.com.desafiodb.apirest_biblioteca.model.Autor;
 import br.com.desafiodb.apirest_biblioteca.service.AutorService;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/autor")
@@ -34,8 +33,10 @@ public class AutorController {
     private AutorService autorService;
 
     @PostMapping()
-    public ResponseEntity<AutorInclusaoResponseDto> salvaAutor(@RequestBody AutorInclusaoRequestDto autorInclusaoRequestDto) {
-        AutorInclusaoResponseDto response = new AutorInclusaoResponseDto(autorService.salvaAutor(autorInclusaoRequestDto.parseToModel()));
+    public ResponseEntity<AutorInclusaoResponseDto> salvaAutor(
+            @RequestBody AutorInclusaoRequestDto autorInclusaoRequestDto) {
+        AutorInclusaoResponseDto response = new AutorInclusaoResponseDto(
+                autorService.salvaAutor(autorInclusaoRequestDto.parseToModel()));
         return ResponseEntity.ok(response);
     }
 
@@ -51,14 +52,19 @@ public class AutorController {
 
     @GetMapping("/nome")
     public ResponseEntity<AutorConsultaResponseDto> buscaAutorPorNome(@RequestParam String nome) {
-        Autor autor = autorService.buscaAutorPorNome(nome).orElseThrow(() -> new RuntimeException("Autor não encontrado."));
-        AutorConsultaResponseDto response = new AutorConsultaResponseDto(autor);
+        Optional<Autor> autor = autorService.buscaAutorPorNome(nome);
+        if(!autor.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        AutorConsultaResponseDto response = new AutorConsultaResponseDto(autor.get());
         return ResponseEntity.ok(response);
     }
 
     @PutMapping()
-    public ResponseEntity<AutorAlteracaoResponseDto> atualizarAutor(@Valid @RequestBody AutorAlteracaoRequestDto autor) {
-        AutorAlteracaoResponseDto autorAtualizado = new AutorAlteracaoResponseDto(autorService.alteraAutor(autor.parseToModel()));
+    public ResponseEntity<AutorAlteracaoResponseDto> atualizarAutor(
+            @RequestBody AutorAlteracaoRequestDto autor) {
+        AutorAlteracaoResponseDto autorAtualizado = new AutorAlteracaoResponseDto(
+                autorService.alteraAutor(autor.parseToModel()));
         return ResponseEntity.ok(autorAtualizado);
     }
 

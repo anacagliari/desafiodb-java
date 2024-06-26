@@ -45,5 +45,4 @@ public class AutorDto {
         this.cpf = cpf;
     }
 
-    
 }

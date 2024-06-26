@@ -26,26 +26,7 @@ public class AluguelService {
     private LivroService livroService;
 
     public Aluguel salvaAluguel(Aluguel aluguel) {
-        if (aluguel.getLocatario() == null || aluguel.getLocatario().getId() == null) {
-            throw new RegraNegocioException("Locatário não informado.");
-        }
-        Optional<Locatario> locatarioExistente = locatarioService.buscaLocatarioPorId(aluguel.getLocatario().getId());
-        if (!locatarioExistente.isPresent()) {
-            throw new RegraNegocioException("Locatário não encontrado.");
-        }
-
-        if (aluguel.getLivros() == null || aluguel.getLivros().isEmpty()) {
-            throw new RegraNegocioException("Livro(s) não informado(s).");
-        }
-        aluguel.getLivros().stream().forEach(livro -> {
-            if (livro.getId() == null) {
-                throw new RegraNegocioException("Livro não informado.");
-            }
-            Optional<Livro> livroExistente = livroService.buscaLivroPorId(livro.getId());
-            if (!livroExistente.isPresent()) {
-                throw new RegraNegocioException("Livro não encontrado. ID: " + livro.getId());
-            }
-        });
+        validaSalvaAluguel(aluguel);
 
         aluguel.setDataRetirada(LocalDate.now());
         aluguel.setDataDevolucao(aluguel.getDataRetirada().plusDays(2L));
@@ -58,7 +39,35 @@ public class AluguelService {
     }
 
     public Optional<Aluguel> buscaAluguelPorId(Long id) {
+        if (id == null) {
+            throw new RegraNegocioException("ID não informado.");
+        }
         return aluguelRepository.findById(id);
     }
 
+    private void validaSalvaAluguel(Aluguel aluguel) {
+        if (aluguel.getLocatario() == null || aluguel.getLocatario().getId() == null) {
+            throw new RegraNegocioException("Locatário não informado.");
+        }
+        Optional<Locatario> locatarioExistente = locatarioService.buscaLocatarioPorId(aluguel.getLocatario().getId());
+        if (!locatarioExistente.isPresent()) {
+            throw new RegraNegocioException("Locatário não encontrado.");
+        }
+        if (aluguel.getLivros() == null || aluguel.getLivros().isEmpty()) {
+            throw new RegraNegocioException("Livro(s) não informado(s).");
+        }
+        List<Livro> livrosAlugados = livroService.listaTodosLivrosAlugados();
+        aluguel.getLivros().stream().forEach(livro -> {
+            if (livro.getId() == null) {
+                throw new RegraNegocioException("Livro não informado.");
+            }
+            Optional<Livro> livroExistente = livroService.buscaLivroPorId(livro.getId());
+            if (!livroExistente.isPresent()) {
+                throw new RegraNegocioException("Livro não encontrado. ID: " + livro.getId());
+            }
+            if (livrosAlugados.contains(livroExistente.get())) {
+                throw new RegraNegocioException("Livro está alugado. ID: " + livro.getId());
+            }
+        });
+    }
 }

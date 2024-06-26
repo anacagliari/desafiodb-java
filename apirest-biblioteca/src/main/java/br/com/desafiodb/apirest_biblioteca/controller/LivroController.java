@@ -34,7 +34,8 @@ public class LivroController {
 
     @PostMapping()
     public ResponseEntity<LivroInclusaoResponseDto> salvaLivro(@Valid @RequestBody LivroInclusaoRequestDto livro) {
-        LivroInclusaoResponseDto livroSalvo = new LivroInclusaoResponseDto(livroService.salvaLivro(livro.parseToModel()));
+        LivroInclusaoResponseDto livroSalvo = new LivroInclusaoResponseDto(
+                livroService.salvaLivro(livro.parseToModel()));
         return ResponseEntity.ok(livroSalvo);
     }
 
@@ -81,7 +82,7 @@ public class LivroController {
     @GetMapping("/{id}")
     public ResponseEntity<LivroConsultaResponseDto> buscaLivroPorId(@PathVariable Long id) {
         Optional<Livro> livro = livroService.buscaLivroPorId(id);
-        if(!livro.isPresent()){
+        if (!livro.isPresent()) {
             return ResponseEntity.notFound().build();
         }
         LivroConsultaResponseDto response = new LivroConsultaResponseDto(livro.get());
@@ -90,7 +91,8 @@ public class LivroController {
 
     @PutMapping()
     public ResponseEntity<LivroAlteracaoResponseDto> atualizaLivro(@Valid @RequestBody LivroAlteracaoRequestDto livro) {
-        LivroAlteracaoResponseDto livroAtualizado = new LivroAlteracaoResponseDto(livroService.alteraLivro(livro.parseToModel()));
+        LivroAlteracaoResponseDto livroAtualizado = new LivroAlteracaoResponseDto(
+                livroService.alteraLivro(livro.parseToModel()));
         return ResponseEntity.ok(livroAtualizado);
     }
 

@@ -25,4 +25,6 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
            "WHERE loc.id = :id")
     List<Livro> listaTodosLivrosAlugadosLocatario(Long id);
     
+    @Query("SELECT COUNT(L) FROM Livro L WHERE L.isbn = :isbn")
+    Long quantidadeLivroIsbn(String isbn);
 }

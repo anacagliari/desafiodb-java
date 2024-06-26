@@ -12,4 +12,7 @@ public interface AutorRepository extends JpaRepository<Autor, Long> {
 
     @Query(value = "SELECT COUNT(LA.*) FROM LIVRO_AUTOR LA WHERE LA.AUTOR_ID = ?1", nativeQuery = true)
     Long quantidadeLivrosAssociados(Long id);
+    
+    @Query("SELECT COUNT(A) FROM Autor A WHERE A.cpf = :cpf")
+    Long quantidadeAutoresCpf(String cpf);
 }

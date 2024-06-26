@@ -22,8 +22,7 @@ public class Autor {
 
     @NotBlank
     private String nome;
-
-    @NotBlank
+    
     private String sexo;
 
     @NotNull

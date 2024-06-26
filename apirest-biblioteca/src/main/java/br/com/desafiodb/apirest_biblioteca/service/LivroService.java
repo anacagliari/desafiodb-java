@@ -24,21 +24,10 @@ public class LivroService {
     private AutorService autorService;
 
     public Livro salvaLivro(Livro livro) {
-        if(livro.getAutores() == null || livro.getAutores().isEmpty()) {
-            throw new RegraNegocioException("Autor(es) não informado(s).");
-        }
-        Set<Autor> autoresConsultados = new HashSet<Autor>();
-        for (Autor autor : livro.getAutores()) {
-            Optional<Autor> autorExistente = this.autorService.buscaAutorPorId(autor.getId());
-            if(!autorExistente.isPresent()){
-                throw new RegraNegocioException("Autor não encontrado.");
-            }
-            autoresConsultados.add(autorExistente.get());
-        }
-        livro.setAutores(autoresConsultados);
+        this.validaSalvaLivro(livro);
         return livroRepository.save(livro);
     }
-
+    
     public List<Livro> listaTodosLivros() {
         return livroRepository.findAll();
     }
@@ -50,10 +39,10 @@ public class LivroService {
     public List<Livro> listaTodosLivrosAlugados() {
         return livroRepository.listaTodosLivrosAlugados(LocalDate.now());
     }
-    
-        public List<Livro> listaTodosLivrosAlugadosLocatario(Long id) {
-            return livroRepository.listaTodosLivrosAlugadosLocatario(id);
-        }
+
+    public List<Livro> listaTodosLivrosAlugadosLocatario(Long id) {
+        return livroRepository.listaTodosLivrosAlugadosLocatario(id);
+    }
 
     public Optional<Livro> buscaLivroPorId(Long id) {
         return livroRepository.findById(id);
@@ -65,6 +54,7 @@ public class LivroService {
             throw new RegraNegocioException("Livro não encontrado.");
         }
         Livro livroExistente = livroExiste.get();
+        this.validaSalvaLivro(livroExistente);
         livroExistente.setNome(livro.getNome());
         livroExistente.setIsbn(livro.getIsbn());
         livroExistente.setDataPublicacao(livro.getDataPublicacao());
@@ -77,6 +67,41 @@ public class LivroService {
             throw new RegraNegocioException("Livro foi alugado, não pode ser deletado.");
         }
         livroRepository.deleteById(id);
+    }
+    
+    private void validaSalvaLivro(Livro livro) {
+        if (livro.getNome() == null || livro.getNome().isEmpty()) {
+            throw new RegraNegocioException("Nome do livro não informado.");
+        }
+        if (livro.getIsbn() == null || livro.getIsbn().isEmpty()) {
+            throw new RegraNegocioException("ISBN do livro não informado.");
+        }
+        if (livro.getIsbn().length() != 13) {
+            throw new RegraNegocioException("ISBN deve conter treze dígitos numérico.");
+        }
+        if (livroRepository.quantidadeLivroIsbn(livro.getIsbn()) > 0) {
+            throw new RegraNegocioException("ISBN existente.");
+        }
+        for (char c : livro.getIsbn().toCharArray()) {
+            if (!Character.isDigit(c)) {
+                throw new RegraNegocioException("ISBN deve conter apenas dígitos numérico.");
+            }
+        }
+        if (livro.getDataPublicacao() == null) {
+            throw new RegraNegocioException("Ano de publicação do livro não informado.");
+        }
+        if (livro.getAutores() == null || livro.getAutores().isEmpty()) {
+            throw new RegraNegocioException("Autor(es) não informado(s).");
+        }
+        Set<Autor> autoresConsultados = new HashSet<Autor>();
+        for (Autor autor : livro.getAutores()) {
+            Optional<Autor> autorExistente = this.autorService.buscaAutorPorId(autor.getId());
+            if (!autorExistente.isPresent()) {
+                throw new RegraNegocioException("Autor não encontrado.");
+            }
+            autoresConsultados.add(autorExistente.get());
+        }
+        livro.setAutores(autoresConsultados);
     }
 
 }
