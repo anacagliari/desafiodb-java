@@ -20,11 +20,11 @@ public class Locatario {
 
     @NotBlank
     private String nome;
-
+    
     private String sexo;
 
     @NotNull
-    private Integer telefone;
+    private Long telefone;
 
     @NotBlank
     @Email
@@ -62,11 +62,11 @@ public class Locatario {
         this.sexo = sexo;
     }
 
-    public Integer getTelefone() {
+    public Long getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Integer telefone) {
+    public void setTelefone(Long telefone) {
         this.telefone = telefone;
     }
 
@@ -118,5 +118,5 @@ public class Locatario {
             return false;
         return true;
     }
-    
+
 }

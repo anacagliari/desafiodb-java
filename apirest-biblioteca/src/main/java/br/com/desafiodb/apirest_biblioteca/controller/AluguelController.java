@@ -1,5 +1,6 @@
 package br.com.desafiodb.apirest_biblioteca.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelInclusaoRequestDto;
+import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelInclusaoResponseDto;
+import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelListaResponseDto;
 import br.com.desafiodb.apirest_biblioteca.model.Aluguel;
 import br.com.desafiodb.apirest_biblioteca.service.AluguelService;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/aluguel")
@@ -22,15 +25,19 @@ public class AluguelController {
     private AluguelService aluguelService;
 
     @PostMapping
-    public ResponseEntity<Aluguel> salvaAluguel(@Valid @RequestBody Aluguel aluguel) {
-        Aluguel aluguelSalvo = aluguelService.salvaAluguel(aluguel);
+    public ResponseEntity<AluguelInclusaoResponseDto> salvaAluguel(@RequestBody AluguelInclusaoRequestDto aluguel) {
+        AluguelInclusaoResponseDto aluguelSalvo = new AluguelInclusaoResponseDto(aluguelService.salvaAluguel(aluguel.parseToModel()));
         return ResponseEntity.ok(aluguelSalvo);
     }
 
     @GetMapping
-    public ResponseEntity<List<Aluguel>> listaTodosAlugueis() {
+    public ResponseEntity<List<AluguelListaResponseDto>> listaTodosAlugueis() {
         List<Aluguel> alugueis = aluguelService.listaTodosAlugueis();
-        return ResponseEntity.ok(alugueis);
+        List<AluguelListaResponseDto> response = new ArrayList<AluguelListaResponseDto>();
+        alugueis.stream().forEach(aluguel -> {
+            response.add(new AluguelListaResponseDto(aluguel));
+        });
+        return ResponseEntity.ok(response);
     }
 
 }
