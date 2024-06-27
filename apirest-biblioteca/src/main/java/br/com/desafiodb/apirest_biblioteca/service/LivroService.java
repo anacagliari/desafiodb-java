@@ -24,7 +24,7 @@ public class LivroService {
     private AutorService autorService;
 
     public Livro salvaLivro(Livro livro) {
-        this.validaSalvaLivro(livro);
+        this.validaSalvaLivro(livro, null);
         return livroRepository.save(livro);
     }
     
@@ -54,10 +54,11 @@ public class LivroService {
             throw new RegraNegocioException("Livro não encontrado.");
         }
         Livro livroExistente = livroExiste.get();
-        this.validaSalvaLivro(livroExistente);
+        this.validaSalvaLivro(livro, livroExistente);
         livroExistente.setNome(livro.getNome());
         livroExistente.setIsbn(livro.getIsbn());
         livroExistente.setDataPublicacao(livro.getDataPublicacao());
+        livroExistente.setAutores(livro.getAutores());
         Livro livroAtualizado = livroRepository.save(livroExistente);
         return livroAtualizado;
     }
@@ -69,7 +70,7 @@ public class LivroService {
         livroRepository.deleteById(id);
     }
     
-    private void validaSalvaLivro(Livro livro) {
+    private void validaSalvaLivro(Livro livro, Livro livroExistente) {
         if (livro.getNome() == null || livro.getNome().isEmpty()) {
             throw new RegraNegocioException("Nome do livro não informado.");
         }
@@ -79,8 +80,10 @@ public class LivroService {
         if (livro.getIsbn().length() != 13) {
             throw new RegraNegocioException("ISBN deve conter treze dígitos numérico.");
         }
-        if (livroRepository.quantidadeLivroIsbn(livro.getIsbn()) > 0) {
-            throw new RegraNegocioException("ISBN existente.");
+        if (livroExistente == null || !livro.getIsbn().equals(livroExistente.getIsbn())) {
+            if (livroRepository.quantidadeLivroIsbn(livro.getIsbn()) > 0) {
+                throw new RegraNegocioException("ISBN existente.");
+            }
         }
         for (char c : livro.getIsbn().toCharArray()) {
             if (!Character.isDigit(c)) {
