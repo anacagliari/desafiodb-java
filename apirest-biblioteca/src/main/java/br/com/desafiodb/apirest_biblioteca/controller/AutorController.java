@@ -24,14 +24,27 @@ import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorInclusaoResponseDto;
 import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorListaResponseDto;
 import br.com.desafiodb.apirest_biblioteca.model.Autor;
 import br.com.desafiodb.apirest_biblioteca.service.AutorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/autor")
+@Tag(name = "Autor", description = "Operações relacionadas aos autores")
 public class AutorController {
 
     @Autowired
     private AutorService autorService;
 
+    @Operation(summary = "Salvar um autor", description = "Adiciona um novo autor ao sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Autor salvo com sucesso", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = AutorInclusaoResponseDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida", content = @Content)
+    })
     @PostMapping()
     public ResponseEntity<AutorInclusaoResponseDto> salvaAutor(
             @RequestBody AutorInclusaoRequestDto autorInclusaoRequestDto) {
@@ -40,6 +53,11 @@ public class AutorController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Listar todos os autores", description = "Retorna uma lista de todos os autores")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de autores retornada com sucesso", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = AutorListaResponseDto.class)) })
+    })
     @GetMapping()
     public ResponseEntity<List<AutorListaResponseDto>> listaTodosAutores() {
         List<Autor> autores = autorService.listaTodosAutores();
@@ -50,16 +68,28 @@ public class AutorController {
         return ResponseEntity.ok(autoresDto);
     }
 
+    @Operation(summary = "Buscar autor por nome", description = "Retorna um autor pelo nome fornecido")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Autor encontrado com sucesso", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = AutorConsultaResponseDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content)
+    })
     @GetMapping("/nome")
     public ResponseEntity<AutorConsultaResponseDto> buscaAutorPorNome(@RequestParam String nome) {
         Optional<Autor> autor = autorService.buscaAutorPorNome(nome);
-        if(!autor.isPresent()) {
+        if (!autor.isPresent()) {
             return ResponseEntity.notFound().build();
         }
         AutorConsultaResponseDto response = new AutorConsultaResponseDto(autor.get());
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Atualizar um autor", description = "Atualiza as informações de um autor existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Autor atualizado com sucesso", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = AutorAlteracaoResponseDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content)
+    })
     @PutMapping()
     public ResponseEntity<AutorAlteracaoResponseDto> atualizarAutor(
             @RequestBody AutorAlteracaoRequestDto autor) {
@@ -68,6 +98,11 @@ public class AutorController {
         return ResponseEntity.ok(autorAtualizado);
     }
 
+    @Operation(summary = "Deletar um autor", description = "Remove um autor pelo ID fornecido")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Autor deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletaAutor(@PathVariable Long id) {
         Optional<Autor> autor = autorService.buscaAutorPorId(id);

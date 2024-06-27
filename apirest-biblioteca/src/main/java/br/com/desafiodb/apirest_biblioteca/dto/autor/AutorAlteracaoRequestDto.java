@@ -1,9 +1,11 @@
 package br.com.desafiodb.apirest_biblioteca.dto.autor;
 
 import br.com.desafiodb.apirest_biblioteca.model.Autor;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class AutorAlteracaoRequestDto extends AutorDto {
 
+    @Schema(description = "ID para referência do autor", example = "1")
     private Long id;
 
     public AutorAlteracaoRequestDto(Autor autor) {

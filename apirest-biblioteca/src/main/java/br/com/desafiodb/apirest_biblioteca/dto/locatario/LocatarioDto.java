@@ -3,14 +3,26 @@ package br.com.desafiodb.apirest_biblioteca.dto.locatario;
 import java.time.LocalDate;
 
 import br.com.desafiodb.apirest_biblioteca.model.Locatario;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class LocatarioDto {
 
+    @Schema(description = "Nome do locatário", example = "João da Silva")
     private String nome;
+
+    @Schema(description = "Sexo do locatário", example = "Masculino")
     private String sexo;
+
+    @Schema(description = "Telefone do locatário", example = "51987654321")
     private Long telefone;
+
+    @Schema(description = "E-mail do locatário", example = "joao.silva@email.com")
     private String email;
+
+    @Schema(description = "Data de nascimento do locatário", example = "1990-01-01")
     private LocalDate dataNascimento;
+
+    @Schema(description = "CPF do locatário", example = "11122233300")
     private String cpf;
 
     public LocatarioDto(Locatario locatario) {

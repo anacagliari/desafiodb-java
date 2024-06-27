@@ -70,4 +70,8 @@ public class AluguelService {
             }
         });
     }
+
+    public void deletaAluguel(Long id) {
+        aluguelRepository.deleteById(id);
+    }
 }
