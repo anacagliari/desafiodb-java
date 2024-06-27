@@ -1,5 +1,6 @@
 package br.com.desafiodb.apirest_biblioteca.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,12 +30,10 @@ public class Aluguel {
     @JoinColumn(name = "locatario_id")
     private Locatario locatario;
 
+    private BigDecimal valor;
+
     @ManyToMany
-    @JoinTable(
-        name = "aluguel_livros",
-        joinColumns = @JoinColumn(name = "aluguel_id"),
-        inverseJoinColumns = @JoinColumn(name = "livro_id")
-    )
+    @JoinTable(name = "aluguel_livros", joinColumns = @JoinColumn(name = "aluguel_id"), inverseJoinColumns = @JoinColumn(name = "livro_id"))
     private List<Livro> livros;
 
     public Long getId() {
@@ -59,6 +58,14 @@ public class Aluguel {
 
     public void setDataDevolucao(LocalDate dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
     public Locatario getLocatario() {
@@ -101,5 +108,5 @@ public class Aluguel {
             return false;
         return true;
     }
-    
+
 }
