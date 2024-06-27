@@ -1,5 +1,6 @@
 package br.com.desafiodb.apirest_biblioteca.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.desafiodb.apirest_biblioteca.dto.livro.LivroAlteracaoRequestDto;
 import br.com.desafiodb.apirest_biblioteca.dto.livro.LivroAlteracaoResponseDto;
@@ -41,15 +43,15 @@ public class LivroController {
 
     @Operation(summary = "Salvar um livro", description = "Adiciona um novo livro ao sistema")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Livro salvo com sucesso", content = {
+            @ApiResponse(responseCode = "201", description = "Livro salvo com sucesso", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = LivroInclusaoResponseDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Requisição inválida", content = @Content)
     })
     @PostMapping()
     public ResponseEntity<LivroInclusaoResponseDto> salvaLivro(@Valid @RequestBody LivroInclusaoRequestDto livro) {
-        LivroInclusaoResponseDto livroSalvo = new LivroInclusaoResponseDto(
-                livroService.salvaLivro(livro.parseToModel()));
-        return ResponseEntity.ok(livroSalvo);
+        LivroInclusaoResponseDto livroSalvo = new LivroInclusaoResponseDto(livroService.salvaLivro(livro.parseToModel()));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(livroSalvo.getId()).toUri();
+        return ResponseEntity.created(location).body(livroSalvo);
     }
 
     @Operation(summary = "Listar todos os livros", description = "Retorna uma lista de todos os livros")
