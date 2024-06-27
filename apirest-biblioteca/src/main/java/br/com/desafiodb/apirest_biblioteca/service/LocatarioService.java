@@ -30,6 +30,13 @@ public class LocatarioService {
         return locatarioRepository.findById(id);
     }
 
+    /**
+     * Método responsável pela alteração de Locatário.
+     * Verifica se o Locatário passado como parâmetro existe no Banco de Dados, após isso, aplica as alterações.
+     * @autor AnaCagliari
+     * @param locatario
+     * @return locatarioAtualizado
+     */
     public Locatario alteraLocatario(Locatario locatario) {
         Optional<Locatario> locatarioExiste = locatarioRepository.findById(locatario.getId());
         if (!locatarioExiste.isPresent()) {
@@ -51,6 +58,16 @@ public class LocatarioService {
         locatarioRepository.deleteById(id);
     }
 
+    /**
+     * Método responsável pela validação das regras do Locatário.
+     * Verifica se os dados não estão nulos ou vazios dos atributos obrigatórios.
+     * Valida o valor recebido de sexo: feminino ou masculino.
+     * Valida o telefone, onde deve receber 10 ou 11 dígitos.
+     * Valida o CPF, onde deve receber 11 dígitos numéricos e ser único.
+     * @autor AnaCagliari
+     * @param locatario
+     * @param locatarioExistente
+     */
     private void validaSalvaLocatario(Locatario locatario, Locatario locatarioExistente) {
         if(locatarioExistente == null || !locatario.getEmail().equals(locatarioExistente.getEmail())){
             this.validaEmail(locatario.getEmail());
@@ -89,6 +106,11 @@ public class LocatarioService {
         }
     }
 
+    /**
+     * Método responsável pela validação do email, onde verifica se está no formato email@email.com
+     * @autor AnaCagliari
+     * @param email
+     */
     private void validaEmail(String email) {
         if (email == null || email.isEmpty()) {
             throw new RegraNegocioException("E-mail do locatário não informado.");

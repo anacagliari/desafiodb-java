@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelDevolveLivrosResponseDto;
+import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelDevolveLivrosResponseV2Dto;
 import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelInclusaoRequestDto;
 import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelInclusaoResponseDto;
 import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelListaResponseDto;
@@ -31,9 +31,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/v1/aluguel")
-@Tag(name = "Aluguel", description = "Operações relacionadas aos aluguéis de livros")
-public class AluguelController {
+@RequestMapping("/v2/aluguel")
+@Tag(name = "Aluguel", description = "Operações relacionadas aos aluguéis de livros - Versão 2")
+public class AluguelControllerV2 {
 
     @Autowired
     private AluguelService aluguelService;
@@ -74,13 +74,12 @@ public class AluguelController {
             @ApiResponse(responseCode = "404", description = "Aluguel não encontrado", content = @Content)
     })
     @PutMapping("devolucao/{id}")
-    public ResponseEntity<AluguelDevolveLivrosResponseDto> devolucaoLivros(@PathVariable Long id) {
+    public ResponseEntity<AluguelDevolveLivrosResponseV2Dto> devolucaoLivros(@PathVariable Long id) {
         Optional<Aluguel> aluguel = aluguelService.buscaAluguelPorId(id);
         if (!aluguel.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        AluguelDevolveLivrosResponseDto response = new AluguelDevolveLivrosResponseDto(
-                aluguelService.devolucaoLivros(aluguel.get()));
+        AluguelDevolveLivrosResponseV2Dto response = new AluguelDevolveLivrosResponseV2Dto(aluguelService.devolucaoLivrosV2(aluguel.get()));
         return ResponseEntity.ok(response);
     }
 

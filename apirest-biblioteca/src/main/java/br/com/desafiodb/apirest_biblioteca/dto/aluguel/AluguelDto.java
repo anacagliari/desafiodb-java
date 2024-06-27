@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import br.com.desafiodb.apirest_biblioteca.model.Aluguel;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public class AlguelDto {
+public class AluguelDto {
 
     @Schema(description = "Data de retirada do aluguel do livro", example = "1990-01-01")
     private LocalDate dataRetirada;
@@ -13,12 +13,12 @@ public class AlguelDto {
     @Schema(description = "Data de devolução do aluguel do livro", example = "1990-01-01")
     private LocalDate dataDevolucao;
 
-    public AlguelDto(Aluguel aluguel) {
+    public AluguelDto(Aluguel aluguel) {
         this.dataRetirada = aluguel.getDataRetirada();
         this.dataDevolucao = aluguel.getDataDevolucao();
     }
 
-    public AlguelDto() {
+    public AluguelDto() {
         super();
     }
 
