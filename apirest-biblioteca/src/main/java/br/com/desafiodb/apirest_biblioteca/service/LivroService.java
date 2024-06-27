@@ -23,11 +23,15 @@ public class LivroService {
     @Autowired
     private AutorService autorService;
 
+    @Autowired
+    private LivroGoogleApiService livroGoogleApiService;
+
     public Livro salvaLivro(Livro livro) {
         this.validaSalvaLivro(livro, null);
+        livro.setResumo(livroGoogleApiService.buscaResumoLivro(livro.getIsbn()));
         return livroRepository.save(livro);
     }
-    
+
     public List<Livro> listaTodosLivros() {
         return livroRepository.findAll();
     }
@@ -69,7 +73,7 @@ public class LivroService {
         }
         livroRepository.deleteById(id);
     }
-    
+
     private void validaSalvaLivro(Livro livro, Livro livroExistente) {
         if (livro.getNome() == null || livro.getNome().isEmpty()) {
             throw new RegraNegocioException("Nome do livro não informado.");

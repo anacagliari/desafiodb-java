@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -31,12 +32,11 @@ public class Livro {
     @NotNull
     private LocalDate dataPublicacao;
 
+    @Column(length = 5000)
+    private String resumo;
+
     @ManyToMany
-    @JoinTable(
-        name = "livro_autor",
-        joinColumns = @JoinColumn(name = "livro_id"),
-        inverseJoinColumns = @JoinColumn(name = "autor_id")
-    )
+    @JoinTable(name = "livro_autor", joinColumns = @JoinColumn(name = "livro_id"), inverseJoinColumns = @JoinColumn(name = "autor_id"))
     private Set<Autor> autores = new HashSet<>();
 
     @ManyToMany(mappedBy = "livros", fetch = FetchType.LAZY)
@@ -72,6 +72,14 @@ public class Livro {
 
     public void setDataPublicacao(LocalDate dataPublicacao) {
         this.dataPublicacao = dataPublicacao;
+    }
+
+    public String getResumo() {
+        return resumo;
+    }
+
+    public void setResumo(String resumo) {
+        this.resumo = resumo;
     }
 
     public Set<Autor> getAutores() {
@@ -115,4 +123,4 @@ public class Livro {
         return true;
     }
 
-} 
+}
