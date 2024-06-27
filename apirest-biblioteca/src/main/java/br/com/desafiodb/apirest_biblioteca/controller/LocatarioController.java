@@ -1,5 +1,6 @@
 package br.com.desafiodb.apirest_biblioteca.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.desafiodb.apirest_biblioteca.dto.locatario.LocatarioAlteracaoRequestDto;
 import br.com.desafiodb.apirest_biblioteca.dto.locatario.LocatarioAlteracaoResponseDto;
@@ -40,16 +42,15 @@ public class LocatarioController {
 
     @Operation(summary = "Salvar um locatário", description = "Adiciona um novo locatário ao sistema")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Locatário salvo com sucesso", content = {
+            @ApiResponse(responseCode = "201", description = "Locatário salvo com sucesso", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = LocatarioInclusaoResponseDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Requisição inválida", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<LocatarioInclusaoResponseDto> salvaLocatario(
-            @RequestBody LocatarioInclusaoRequestDto locatarioInclusaoRequestDto) {
-        LocatarioInclusaoResponseDto response = new LocatarioInclusaoResponseDto(
-                locatarioService.salvaLocatario(locatarioInclusaoRequestDto.parseToModel()));
-        return ResponseEntity.ok(response);
+    public ResponseEntity<LocatarioInclusaoResponseDto> salvaLocatario(@RequestBody LocatarioInclusaoRequestDto locatarioInclusaoRequestDto) {
+        LocatarioInclusaoResponseDto response = new LocatarioInclusaoResponseDto(locatarioService.salvaLocatario(locatarioInclusaoRequestDto.parseToModel()));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
+        return ResponseEntity.created(location).body(response);
     }
 
     @Operation(summary = "Listar todos os locatários", description = "Retorna uma lista de todos os locatários")

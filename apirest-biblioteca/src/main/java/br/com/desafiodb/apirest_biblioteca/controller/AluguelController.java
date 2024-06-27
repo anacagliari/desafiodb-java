@@ -1,5 +1,6 @@
 package br.com.desafiodb.apirest_biblioteca.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelInclusaoRequestDto;
 import br.com.desafiodb.apirest_biblioteca.dto.aluguel.AluguelInclusaoResponseDto;
@@ -36,15 +38,15 @@ public class AluguelController {
 
     @Operation(summary = "Registrar um aluguel", description = "Registra o aluguel de um livro por um locatário")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Aluguel salvo com sucesso", content = {
+            @ApiResponse(responseCode = "201", description = "Aluguel salvo com sucesso", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = AluguelInclusaoResponseDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Requisição inválida", content = @Content)
     })
     @PostMapping
     public ResponseEntity<AluguelInclusaoResponseDto> salvaAluguel(@RequestBody AluguelInclusaoRequestDto aluguel) {
-        AluguelInclusaoResponseDto aluguelSalvo = new AluguelInclusaoResponseDto(
-                aluguelService.salvaAluguel(aluguel.parseToModel()));
-        return ResponseEntity.ok(aluguelSalvo);
+        AluguelInclusaoResponseDto aluguelSalvo = new AluguelInclusaoResponseDto(aluguelService.salvaAluguel(aluguel.parseToModel()));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(aluguelSalvo.getId()).toUri();
+        return ResponseEntity.created(location).body(aluguelSalvo);
     }
 
     @Operation(summary = "Listar todos os aluguéis de livros", description = "Retorna uma lista de todos os aluguéis")

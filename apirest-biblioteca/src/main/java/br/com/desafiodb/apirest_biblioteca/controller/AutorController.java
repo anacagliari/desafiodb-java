@@ -1,5 +1,6 @@
 package br.com.desafiodb.apirest_biblioteca.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorAlteracaoRequestDto;
 import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorAlteracaoResponseDto;
@@ -41,16 +43,16 @@ public class AutorController {
 
     @Operation(summary = "Salvar um autor", description = "Adiciona um novo autor ao sistema")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Autor salvo com sucesso", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = AutorInclusaoResponseDto.class)) }),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida", content = @Content)
+        @ApiResponse(responseCode = "201", description = "Autor salvo com sucesso", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = AutorInclusaoResponseDto.class)) 
+        }),
+        @ApiResponse(responseCode = "400", description = "Requisição inválida", content = @Content)
     })
     @PostMapping()
-    public ResponseEntity<AutorInclusaoResponseDto> salvaAutor(
-            @RequestBody AutorInclusaoRequestDto autorInclusaoRequestDto) {
-        AutorInclusaoResponseDto response = new AutorInclusaoResponseDto(
-                autorService.salvaAutor(autorInclusaoRequestDto.parseToModel()));
-        return ResponseEntity.ok(response);
+    public ResponseEntity<AutorInclusaoResponseDto> salvaAutor(@RequestBody AutorInclusaoRequestDto autorInclusaoRequestDto) {
+        AutorInclusaoResponseDto response = new AutorInclusaoResponseDto(autorService.salvaAutor(autorInclusaoRequestDto.parseToModel()));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
+        return ResponseEntity.created(location).body(response);
     }
 
     @Operation(summary = "Listar todos os autores", description = "Retorna uma lista de todos os autores")

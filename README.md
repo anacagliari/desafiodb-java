@@ -104,6 +104,8 @@ Caso queira acessar via cliente de banco de dados, os dados de conexão para tes
 
 3. Versão do Swagger X versão do Spring Boot: investi bastante tempo até encontrar uma versão da OpenAPI que funcionasse com o Spring Boot 3.
 
+4. Equipamento: com a quantidade de ferramentas que utilizei para desenvolver este desafio, visualizei a necessidade de ter uma máquina mais robusta. Por vezes as ferramentas utilizadas ficaram lentas, o que comprometeu a produtividade.
+
 ## Conhecimentos de outras tecnologias não utilizadas
 HTML, CSS, JavaScript, Python, TypeScript.
 
@@ -113,7 +115,11 @@ SCRUM, prototipação, histórias de usuários, relacionamento com cliente.
 ## Escolhas tomadas
     Busquei aplicar os conhecimentos que tive em aula, sendo eles:
 1. Arquitetura MVC entendo que esta arquitetura é a mais aderente para o desenvolvimento deste projeto/desafio.
+
 2. Dto: utilizei este padrão buscando minimizar os dados expostos em cada endpoint, bem como a busca de melhor eficiência no tráfego de rede.
+
 3. Handler de exceções: com esta estrutura busquei centralizar o tratamento de exceções, facilitando a manutenção e visando o padrão Restful.
+
 4. Teste Coverage: em minhas pesquisas durante este desafio, percebi a ampla utilização de tecnologias que analisam a cobertura de testes de uma aplicação. Por este motivo, quis aplicar este conceito de cobertura de testes na API. Elegi o Jacoco por perceber que é um dos pluggins mais utilizados para este fim.
+
 5. Docker: visto que um dos objetivos deste desafio era a persistência de dados, busquei conhecimento para facilitar a configuração e a reprodutibilidade do ambiente em que desenvolvi. Utilizei os volumes do Docker para preservar os dados. 
