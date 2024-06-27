@@ -3,11 +3,17 @@ package br.com.desafiodb.apirest_biblioteca.dto.livro;
 import java.time.LocalDate;
 
 import br.com.desafiodb.apirest_biblioteca.model.Livro;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class LivroDto {
 
+    @Schema(description = "Nome do livro", example = "João e Maria")
     private String nome;
+
+    @Schema(description = "ISBN do livro, 13 dígitos", example = "1111122222333")
     private String isbn;
+
+    @Schema(description = "Data de publicação do livro", example = "1990-01-01")
     private LocalDate dataPublicacao;
 
     public LivroDto(Livro livro) {

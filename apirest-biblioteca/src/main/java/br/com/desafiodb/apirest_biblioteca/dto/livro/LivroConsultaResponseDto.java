@@ -5,9 +5,11 @@ import java.util.List;
 
 import br.com.desafiodb.apirest_biblioteca.dto.autor.AutorDto;
 import br.com.desafiodb.apirest_biblioteca.model.Livro;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class LivroConsultaResponseDto extends LivroDto {
     
+    @Schema(description = "ID para referência do livro", example = "1")
     private Long id;
 
     private List<AutorDto> autores;
