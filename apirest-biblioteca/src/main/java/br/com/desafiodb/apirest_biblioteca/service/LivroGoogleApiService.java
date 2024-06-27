@@ -14,6 +14,13 @@ public class LivroGoogleApiService {
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * Método responsável por consumir API do Google.
+     * Dentre todos os valores, escolhi buscar somente o resumo/description.
+     * @autor AnaCagliari
+     * @param isbn
+     * @return
+     */
     public String buscaResumoLivro(String isbn) {
 
         String url = URL_GOOGLE_API + isbn;

@@ -50,6 +50,13 @@ public class AutorService {
         autorRepository.deleteById(id);
     }
 
+    /**
+     * Método responsável pela alteração de Autor.
+     * Verifica se o Autor passado como parâmetro existe no Banco de Dados, após isso, aplica as alterações.
+     * @autor AnaCagliari
+     * @param autor
+     * @return autorAtualizado
+     */
     public Autor alteraAutor(Autor autor) {
         Optional<Autor> autorExiste = autorRepository.findById(autor.getId());
         if (!autorExiste.isPresent()) {
@@ -65,6 +72,15 @@ public class AutorService {
         return autorAtualizado;
     }
 
+    /**
+     * Método responsável pela validação das regras do Autor.
+     * Verifica se os dados não estão nulos ou vazios dos atributos obrigatórios.
+     * Valida o valor recebido de sexo: feminino ou masculino.
+     * Valida o CPF, onde deve receber 11 dígitos numéricos e ser único.
+     * @autor AnaCagliari
+     * @param autor
+     * @param autorExistente
+     */
     private void validaSalvaAutor(Autor autor, Autor autorExistente) {
         if (autor.getNome() == null || autor.getNome().isEmpty()) {
             throw new RegraNegocioException("Nome do autor não informado.");

@@ -52,6 +52,13 @@ public class LivroService {
         return livroRepository.findById(id);
     }
 
+    /**
+     * Método responsável pela alteração de Livro.
+     * Verifica se o Livro passado como parâmetro existe no Banco de Dados, após isso, aplica as alterações.
+     * @autor AnaCagliari
+     * @param livro
+     * @return livroAtualizado
+     */
     public Livro alteraLivro(Livro livro) {
         Optional<Livro> livroExiste = livroRepository.findById(livro.getId());
         if (!livroExiste.isPresent()) {
@@ -74,6 +81,14 @@ public class LivroService {
         livroRepository.deleteById(id);
     }
 
+    /**
+     * Método responsável pela validação das regras do Livro.
+     * Verifica se os dados não estão nulos ou vazios dos atributos obrigatórios.
+     * Valida o ISBN, onde deve receber 13 dígitos numéricos e ser único.
+     * @autor AnaCagliari
+     * @param livro
+     * @param livroExistente
+     */
     private void validaSalvaLivro(Livro livro, Livro livroExistente) {
         if (livro.getNome() == null || livro.getNome().isEmpty()) {
             throw new RegraNegocioException("Nome do livro não informado.");

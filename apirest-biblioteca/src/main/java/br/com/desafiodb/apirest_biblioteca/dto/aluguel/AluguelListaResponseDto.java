@@ -6,7 +6,7 @@ import java.util.List;
 import br.com.desafiodb.apirest_biblioteca.model.Aluguel;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public class AluguelListaResponseDto extends AlguelDto {
+public class AluguelListaResponseDto extends AluguelDto {
 
     @Schema(description = "ID para referência do aluguel", example = "1")
     private Long id;

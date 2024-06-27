@@ -103,3 +103,6 @@ Busquei aplicar os conhecimentos que tive em aula, sendo eles:
 3. Handler de exceções: com esta estrutura busquei centralizar o tratamento de exceções, facilitando a manutenção e visando o padrão Restful.
 4. Teste Coverage: em minhas pesquisas durante este desafio, percebi a ampla utilização de tecnologias que analisam a cobertura de testes de uma aplicação. Por este motivo, quis aplicar este conceito de cobertura de testes na API. Elegi o Jacoco por perceber que é um dos pluggins mais utilizados para este fim.
 5. Docker: visto que um dos objetivos deste desafio era a persistência de dados, busquei conhecimento para facilitar a configuração e a reprodutibilidade do ambiente em que desenvolvi. Utilizei os volumes do Docker para preservar os dados. 
+
+## Tarefa Bônus 3
+Decidi fazer o versionamento da minha API pela prática de Versionamento na URI, pois achei a mais simples de entender e implementar.
